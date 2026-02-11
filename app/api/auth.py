@@ -3,7 +3,7 @@ from typing import Optional, Dict, Any
 from functools import wraps
 import hashlib
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import bcrypt  # Replaced passlib with direct bcrypt
 from flask import request, jsonify, g
 import httpx
 
@@ -11,19 +11,26 @@ from app.config import settings
 from app.db import queries
 from app.db.database import db
 
-# Password hashing context (reverting to passlib for compatibility)
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
 # ===== Password Functions =====
 
 def hash_password(password: str) -> str:
-    """Hash a password using passlib context"""
-    return pwd_context.hash(password)
+    """Hash a password using bcrypt (Python 3.13 compatible)"""
+    pwd_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(pwd_bytes, salt)
+    return hashed.decode('utf-8')
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password using passlib context (handles existing hashes)"""
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verify a password using bcrypt"""
+    try:
+        if not hashed_password:
+            return False
+        plain_bytes = plain_password.encode('utf-8')
+        hashed_bytes = hashed_password.encode('utf-8')
+        return bcrypt.checkpw(plain_bytes, hashed_bytes)
+    except Exception:
+        # Failssafe for invalid hash formats or other errors
+        return False
 
 
 # ===== JWT Token Functions =====

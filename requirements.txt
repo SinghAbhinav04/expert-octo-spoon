@@ -13,7 +13,8 @@ pymongo[srv]>=4.10.0
 
 # Authentication & Security
 python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
+# passlib[bcrypt]==1.7.4  <-- Removed due to incompatibility with Python 3.13 / new bcrypt
+bcrypt>=4.0.1
 
 # HTTP Client
 httpx>=0.28.1
