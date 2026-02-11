@@ -1,0 +1,34 @@
+# Web Framework
+flask>=3.0.0
+flask-cors>=4.0.0
+asgiref>=3.7.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.10.0
+pydantic-settings>=2.6.0
+email-validator>=2.1.0
+
+# Database - MongoDB
+motor>=3.6.0
+pymongo[srv]>=4.10.0
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# HTTP Client
+httpx>=0.28.1
+
+# LLM Providers
+google-genai>=1.14.0
+openai>=1.82.0
+
+# Environment & Config
+python-dotenv>=1.0.0
+
+# Utilities
+aiofiles>=24.1.0
+
+# Voice Processing (DISABLED)
+# resemblyzer @ git+https://github.com/resemble-ai/Resemblyzer.git
+# soundfile>=0.12.1
+# librosa>=0.10.1
