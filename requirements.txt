@@ -33,3 +33,4 @@ aiofiles>=24.1.0
 # resemblyzer @ git+https://github.com/resemble-ai/Resemblyzer.git
 # soundfile>=0.12.1
 # librosa>=0.10.1
+resend==0.8.0

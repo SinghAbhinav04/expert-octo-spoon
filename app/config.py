@@ -34,6 +34,10 @@ class Settings(BaseSettings):
     # LLM Provider - Groq
     GROQ_API_KEY: str = ""
     
+    # Email Service (Resend)
+    RESEND_API_KEY: str = ""
+    RESEND_FROM_EMAIL: str = "noreply@koma-ai.app"
+
     # SMTP - Email OTP
     SMTP_HOST: str = "smtp.gmail.com"
     SMTP_PORT: int = 587
