@@ -11,7 +11,7 @@ CORS(app)
 @app.route("/")
 async def home():
     return jsonify({
-        "message": "Step 2: Config + DB",
+        "message": "Step 3: Auth",
         "version": settings.APP_VERSION,
         "status": "running"
     })
@@ -26,6 +26,10 @@ async def health():
         return jsonify({"status": "healthy", "database": "connected"}), 200
     except Exception as e:
         return jsonify({"status": "unhealthy", "database": str(e)}), 500
+
+# Auth Blueprint
+from app.api.routes_auth import bp as auth_bp
+app.register_blueprint(auth_bp)
 
 # WsgiToAsgi wrapper for Uvicorn
 asgi_app = WsgiToAsgi(app)
