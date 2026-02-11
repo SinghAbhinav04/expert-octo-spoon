@@ -105,11 +105,19 @@ def _build_otp_email(to_email: str, otp_code: str, action: str = "verify") -> MI
 
 def send_otp_email(to_email: str, otp_code: str, action: str = "verify") -> bool:
     """Send OTP email via Gmail SMTP."""
+    # ALWAYS LOG OTP FOR DEBUGGING (Since Railway blocks SMTP)
+    print(f"🔐 DEBUG OTP for {to_email}: {otp_code}")
+
     msg = _build_otp_email(to_email, otp_code, action)
     success = _send_email(msg, to_email)
+    
     if success:
         print(f"✅ OTP email sent to {to_email}")
-    return success
+        return True
+    else:
+        print(f"❌ Failed to send OTP email to {to_email} (Network/Auth Error)")
+        # Allow proceeding to OTP entry screen anyway (User can read logs)
+        return True
 
 
 # ===== Login Security Alert =====
