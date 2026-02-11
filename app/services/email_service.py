@@ -42,7 +42,7 @@ def _send_email(msg: MIMEMultipart, to_email: str) -> bool:
         context.check_hostname = False
         context.verify_mode = ssl.CERT_NONE
         
-        with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
+        with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=3) as server:
             server.starttls(context=context)
             server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
             server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())
