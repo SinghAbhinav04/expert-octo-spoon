@@ -187,3 +187,49 @@ class StepResponse(BaseModel):
 class ErrorResponse(BaseModel):
     detail: str
     error_code: Optional[str] = None
+
+
+# ===== Agent Models =====
+
+class AgentRunRequest(BaseModel):
+    """Request body for POST /agent/run"""
+    prompt: str = Field(..., min_length=1, max_length=5000)
+    session_id: Optional[str] = None
+
+
+class AgentPlanStep(BaseModel):
+    """A single step in an execution plan"""
+    step_id: int
+    tool_name: str
+    description: str = ""
+    args: Dict[str, Any] = {}
+    depends_on: List[int] = []
+
+
+class AgentPlanResponse(BaseModel):
+    """Execution plan returned by the planner"""
+    goal: str
+    complexity: str
+    reasoning: str = ""
+    steps: List[AgentPlanStep] = []
+
+
+class AgentStepResult(BaseModel):
+    """Result of a single tool execution"""
+    step_id: int
+    tool_name: str
+    description: str = ""
+    success: bool
+    output: Optional[str] = None
+    error: Optional[str] = None
+    latency_ms: int = 0
+    tokens_used: int = 0
+
+
+class AgentMemoryEntry(BaseModel):
+    """A single memory entry"""
+    id: str
+    prompt: str
+    response: str
+    plan_summary: Optional[Dict[str, Any]] = None
+    created_at: Optional[datetime] = None

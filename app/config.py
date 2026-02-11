@@ -59,6 +59,12 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     
+    # Agent System
+    AGENT_MAX_STEPS: int = 10
+    AGENT_STEP_TIMEOUT_SECONDS: int = 60
+    AGENT_TOTAL_TIMEOUT_SECONDS: int = 120
+    AGENT_RETRY_ON_FAILURE: bool = True
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

@@ -433,3 +433,28 @@ async def mark_user_verified(db, user_id: str):
         {"$set": {"is_verified": True, "updated_at": _now()}}
     )
 
+
+# ===== Agent Plan Queries =====
+
+async def store_agent_plan(db, request_id: str, plan_data: Dict) -> Dict:
+    """Store an agent execution plan"""
+    doc = {
+        "_id": _new_id(),
+        "request_id": str(request_id),
+        "plan": plan_data,
+        "created_at": _now()
+    }
+    await db.db.agent_plans.insert_one(doc)
+    result = dict(doc)
+    result["id"] = result.pop("_id")
+    return result
+
+
+async def get_agent_plan(db, request_id: str) -> Optional[Dict]:
+    """Get the agent execution plan for a request"""
+    doc = await db.db.agent_plans.find_one({"request_id": str(request_id)})
+    if not doc:
+        return None
+    doc["id"] = doc.pop("_id")
+    return doc
+

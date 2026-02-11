@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, g
 from app.db import models, queries
 from app.db.database import db
 from app.api import auth
-from app.orchestrator import get_orchestrator
+from app.agent.executor import get_agent_runner
 import asyncio
 
 bp = Blueprint('tasks', __name__)
@@ -86,21 +86,15 @@ async def submit_request(session_id):
     if session['user_id'] != g.current_user['id']:
         return jsonify({"detail": "Access denied"}), 403
         
-    orchestrator = get_orchestrator()
-    result = await orchestrator.process_request(
-        db,
+    # Route through the agent runner (uses tools, planner, memory)
+    runner = get_agent_runner()
+    result = await runner.run(
+        db=db,
         session_id=session_id,
-        user_prompt=request_data.user_prompt
+        user_id=g.current_user['id'],
+        user_prompt=request_data.user_prompt,
     )
-    # result is likely a dict or model dump already?
-    # verify orchestrator return type.
-    # It returns dict matching RequestResponse + extra fields?
-    # Models in minimal-ai/backend/app/db/models.py
-    # I trust it returns serializable dict or Pydantic model.
-    # If Pydantic model, need to dump.
-    if hasattr(result, "model_dump"):
-        return jsonify(result.model_dump())
-    return jsonify(result)
+    return jsonify(result.to_dict())
 
 @bp.route("/requests/<request_id>", methods=["GET"])
 @auth.token_required

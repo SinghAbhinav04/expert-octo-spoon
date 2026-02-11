@@ -30,10 +30,12 @@ async def health():
 # Blueprints
 from app.api.routes_auth import bp as auth_bp
 from app.api.routes_tasks import bp as tasks_bp
+from app.api.routes_agent import bp as agent_bp
 # from app.api.routes_voice import bp as voice_bp  <-- Disabled to avoid missing deps
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(tasks_bp)
+app.register_blueprint(agent_bp)
 # app.register_blueprint(voice_bp)
 
 # WsgiToAsgi wrapper for Uvicorn
